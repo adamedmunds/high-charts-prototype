@@ -1,8 +1,5 @@
-import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom';
-import { ChartComponent } from './Charts/Chart';
-import { OldChart } from './Charts/ChartOld';
+import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { links } from './utils/links';
-import { ScatterChart } from './Charts/ScatterChart';
 
 export const App = () => {
   return (
@@ -13,7 +10,7 @@ export const App = () => {
             {Object.keys(links).map((keyName) => {
               return (
                 <li key={keyName}>
-                  <Link to={links[keyName as keyof typeof links]}>
+                  <Link to={links[keyName as keyof typeof links].link}>
                     {keyName}
                   </Link>
                 </li>
@@ -23,9 +20,11 @@ export const App = () => {
         </nav>
 
         <Routes>
-          <Route path={links.oldChart} element={<OldChart />}></Route>
-          <Route path={links.home} element={<ChartComponent />}></Route>
-          <Route path={links.scatter} element={<ScatterChart />}></Route>
+          {Object.keys(links).map((keyName) => {
+            const link = links[keyName as keyof typeof links];
+            const Component = link.component;
+            return <Route path={link.link} element={<Component />} />;
+          })}
         </Routes>
       </div>
     </Router>

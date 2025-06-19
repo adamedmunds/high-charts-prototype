@@ -24,8 +24,6 @@ export const NumberInput = ({
         type='input'
         value={data.length}
         onChange={(event) => {
-          console.log(typeof data);
-
           const values =
             mode === 'single'
               ? generateSingleHighchartsData(Number(event.target.value))

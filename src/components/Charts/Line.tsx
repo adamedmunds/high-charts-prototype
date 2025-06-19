@@ -1,13 +1,14 @@
-import { Chart, Series, Title } from '@highcharts/react';
-import * as Highcharts from 'highcharts';
+import { Chart, Series, Title, setHighcharts } from '@highcharts/react';
+import * as Highcharts from 'highcharts/highcharts';
 import 'highcharts/modules/boost';
+import 'highcharts/modules/exporting.js';
 import { useEffect, useMemo, useState } from 'react';
-import { generateSingleHighchartsData } from '../utils/dataGenerator';
-import { Checkbox } from '../Checkbox';
-import { NumberInput } from '../NumberInput';
 import { Controls } from '../Controls';
+import { generateSingleHighchartsData } from '../utils/dataGenerator';
 
-export const ChartComponent = () => {
+setHighcharts(Highcharts);
+
+export const LineComponent = () => {
   const [data, setData] = useState<number[]>([]);
   const [isRealTime, setIsRealTime] = useState<boolean>(false);
   const [boosted, setBoosted] = useState<boolean>(true);

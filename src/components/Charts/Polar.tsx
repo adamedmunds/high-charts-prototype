@@ -1,29 +1,27 @@
 import { Chart, setHighcharts } from '@highcharts/react';
-import { ScatterSeries } from '@highcharts/react/series/Scatter';
 import * as Highcharts from 'highcharts/highcharts';
 import 'highcharts/modules/boost';
+import 'highcharts/highcharts-more';
 import { useEffect, useMemo, useState } from 'react';
 import { Controls } from '../Controls';
-import { generateDoubleHighchartsData } from '../utils/dataGenerator';
+import { generateSingleHighchartsData } from '../utils/dataGenerator';
 
 setHighcharts(Highcharts);
 
-export const ScatterChart = () => {
-  const [data, setData] = useState<[number, number][]>([]);
+// Boosted mode does not seem to work with Polar charts
+export const Polar = () => {
+  const [data, setData] = useState<number[]>([]);
   const [isRealTime, setIsRealTime] = useState<boolean>(false);
-  const [boosted, setBoosted] = useState<boolean>(true);
+  const [boosted, setBoosted] = useState<boolean>(false);
 
   useMemo(() => {
-    setData(generateDoubleHighchartsData(1000));
+    setData(generateSingleHighchartsData(100));
   }, []);
 
   useEffect(() => {
     if (isRealTime) {
       const interval = setInterval(() => {
-        setData((prevData) => [
-          ...prevData,
-          [Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-        ]);
+        setData((prevData) => [...prevData, Math.round(Math.random() * 100)]);
       }, 1000);
 
       return () => clearInterval(interval);
@@ -40,10 +38,19 @@ export const ScatterChart = () => {
             seriesThreshold: 1,
             enabled: boosted,
           },
+          chart: {
+            polar: true,
+            type: 'column',
+          },
+          series: [
+            {
+              type: 'column',
+              name: 'Random Data',
+              data: data,
+            },
+          ],
         }}
-      >
-        <ScatterSeries data={data} />
-      </Chart>
+      ></Chart>
       <Controls
         data={data}
         setData={setData}
@@ -51,7 +58,7 @@ export const ScatterChart = () => {
         setIsRealTime={setIsRealTime}
         boosted={boosted}
         setBoosted={setBoosted}
-        mode='double'
+        mode='single'
       />
     </>
   );

@@ -1,6 +1,6 @@
+import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import 'highcharts/modules/boost';
-import Highcharts from 'highcharts';
 import { generateSingleHighchartsData } from '../utils/dataGenerator';
 
 const options = {
@@ -18,7 +18,7 @@ const options = {
   },
 };
 
-export const OldChart = () => {
+export const OldLine = () => {
   return (
     <HighchartsReact
       highcharts={Highcharts}
