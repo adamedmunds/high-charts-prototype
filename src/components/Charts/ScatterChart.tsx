@@ -1,25 +1,27 @@
-import { Chart, Series, Title } from '@highcharts/react';
+import { Chart } from '@highcharts/react';
+import { ScatterSeries } from '@highcharts/react/series/Scatter';
 import * as Highcharts from 'highcharts';
 import 'highcharts/modules/boost';
 import { useEffect, useMemo, useState } from 'react';
-import { generateSingleHighchartsData } from '../utils/dataGenerator';
-import { Checkbox } from '../Checkbox';
-import { NumberInput } from '../NumberInput';
 import { Controls } from '../Controls';
+import { generateDoubleHighchartsData } from '../utils/dataGenerator';
 
-export const ChartComponent = () => {
-  const [data, setData] = useState<number[]>([]);
+export const ScatterChart = () => {
+  const [data, setData] = useState<[number, number][]>([]);
   const [isRealTime, setIsRealTime] = useState<boolean>(false);
   const [boosted, setBoosted] = useState<boolean>(true);
 
   useMemo(() => {
-    setData(generateSingleHighchartsData(1000));
+    setData(generateDoubleHighchartsData(1000));
   }, []);
 
   useEffect(() => {
     if (isRealTime) {
       const interval = setInterval(() => {
-        setData((prevData) => [...prevData, Math.round(Math.random() * 100)]);
+        setData((prevData) => [
+          ...prevData,
+          [Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
+        ]);
       }, 1000);
 
       return () => clearInterval(interval);
@@ -38,8 +40,7 @@ export const ChartComponent = () => {
           },
         }}
       >
-        <Title text='My Chart Title' />
-        <Series type='line' data={data} />
+        <ScatterSeries data={data} />
       </Chart>
       <Controls
         data={data}
@@ -48,7 +49,7 @@ export const ChartComponent = () => {
         setIsRealTime={setIsRealTime}
         boosted={boosted}
         setBoosted={setBoosted}
-        mode='single'
+        mode='double'
       />
     </>
   );
